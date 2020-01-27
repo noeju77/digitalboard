@@ -50,7 +50,6 @@ class daoUsers {
         if (!$this->conn->query($sql)) {
             return false;
         } else {
-
             return true;
         }
         //una vez insertado los datos, cerramos la conexion activa
@@ -158,23 +157,50 @@ class daoUsers {
         $surnames = $objUser->getSurnames();
         $phone = $objUser->getPhone();
         $email = $objUser->getEmail();
-        $password = $objUser->getPassword();
         $state = $objUser->getState();
         $image = $objUser->getImage();
 
 
         //ahora creo la sql que ejecutaré para eliminar datos 
 
-        $sql = "UPDATE users SET idTypeUsers='$idTypeUsers', name ='$name' , surnames ='$surnames',phone ='$phone',email='$email',password='$password', state='$state',image='$image' WHERE idUsers='$idUsers'";
+        $sql = "UPDATE users SET idTypeUsers='$idTypeUsers', name ='$name' , surnames ='$surnames',phone ='$phone',email='$email', state='$state',image='$image' WHERE idUsers='$idUsers'";
         //ejecutamos la consulta y si da error imprimimos dicho error
         if (!$this->conn->query($sql)) {
+            mysqli_close($this->conn);
             print false;
         } else {
+            mysqli_close($this->conn);
+            return true;
+        }
+    }
+
+    public function modificarWithPassword($objUser) {
+
+        //aqui paso del objeto Usuario a las variables individuales
+
+        $idUsers = $objUser->getIdUsers();
+        $idTypeUsers = $objUser->getIdTypeUsers();
+        $name = $objUser->getName();
+        $surnames = $objUser->getSurnames();
+        $phone = $objUser->getPhone();
+        $email = $objUser->getEmail();
+        $password = $objUser->getPassword();
+        $state = $objUser->getState();
+        $image = $objUser->getImage();
+
+
+        //ahora creo la sql que ejecutaré para eliminar datos
+
+        $sql = "UPDATE users SET idTypeUsers='$idTypeUsers', name ='$name' , surnames ='$surnames',phone ='$phone',email='$email',password = SHA2('$password', 224), state='$state',image='$image' WHERE idUsers='$idUsers'";
+        //ejecutamos la consulta y si da error imprimimos dicho error
+        if (!$this->conn->query($sql)) {
+            mysqli_close($this->conn);
+            print false;
+        } else {
+            mysqli_close($this->conn);
             return true;
         }
 
-        //una vez modificado los datos, cerramos la conexion activa
-        mysqli_close($this->conn);
     }
 
 //fin modificar

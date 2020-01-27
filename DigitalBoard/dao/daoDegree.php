@@ -1,5 +1,6 @@
 <?php
 
+require_once "../library/conn.php";
 require_once '../model/degree.php';
 
 class daoDegree {

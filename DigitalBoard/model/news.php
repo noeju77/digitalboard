@@ -49,6 +49,30 @@ class news {
         $this->publication = $publication;
     }
 
+    function setIdTypeNews($idTypeNews){
+        $this->idTypeNews = $idTypeNews;
+    }
+
+    function setIdUsers($idUsers){
+        $this->idUsers = $idUsers;
+    }
+
+    function setIdSubject($idSubject){
+        $this->idSubject = $idSubject;
+    }
+
+    function getIdTypeNews(){
+        return $this->idTypeNews;
+    }
+
+    function getIdUsers(){
+       return $this->idUsers;
+    }
+
+    function getIdSubject(){
+        return $this->idSubject;
+    }
+
     public function __toString() {
         
     }

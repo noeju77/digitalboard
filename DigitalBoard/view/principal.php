@@ -1,12 +1,31 @@
+<?php
+include_once '../model/users.php';
+
+session_start();
+
+//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+//    header("Location: ../controller/controllerLogOut.php");
+//}
+
+/*
+ * esto es para pruebas, borrar después
+ * */
+$modelUser = new users();
+$modelUser->setEmail("jagarbar@alu.upo.es");
+$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
+
+/*
+ * Borrar hasya aquí
+ * */
+?>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>DigitalBoard</title>
     <link rel="icon" type="image/png" sizes="212x220" href="../assets/img/birrete.png">
-
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
     <link rel="stylesheet" href="../assets/fonts/font-awesome.min.css">
@@ -24,20 +43,17 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-md fixed-top navbar--apple" style="height: auto;width: auto;opacity: 1;filter: blur(0px);margin-left: 0px;margin-right: 0px;margin-top: 5px;">
+    <nav class="navbar navbar-dark navbar-expand-md fixed-top navbar--apple" style="height: auto;width: auto;opacity: 1;filter: blur(0px);margin-left: 0px;margin-right: 0px;margin-top: 0px;">
         <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#menu"><span class="sr-only">Toggle navigation</span><i class="icon-graduation" style="margin-right: 15px;font-size: 35px;margin-top: 0px;padding-top: 0px;"></i><span style="margin-right: 10px;">DigitalBoard</span><span class="navbar-toggler-icon"><i class="la la-navicon"></i></span></button>
             <div
                 class="collapse navbar-collapse" id="menu">
                 <ul class="nav navbar-nav flex-grow-1 justify-content-between flex-nowrap" style="margin-top: 16px;">
-                    <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="index.html"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="font-size: 20px;">Universidad</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="font-size: 20px;">Facultad</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="font-size: 20px;">Titulación</a></li>
+                    <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="principal.php"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
                     <li class="nav-item" role="presentation"></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.html" style="font-size: 20px;" title="Personaliza tu perfil">Nombre Usuario</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../assets/img/Retrato_JAGB_peque.jpg" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
-                    <li class="nav-item"
-                        role="presentation"><a class="nav-link" href="index.html" style="font-size: 20px;">Log Out</a></li>
+                    <li class="nav-item" role="presentation"></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
                 </ul>
@@ -127,3 +143,4 @@
 </body>
 
 </html>
+

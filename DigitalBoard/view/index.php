@@ -1,3 +1,29 @@
+<?php
+
+include_once '../model/news.php';
+
+/*
+ * esto es para pruebas, borrar después
+ * */
+$modelNews1 = new news();
+$modelNews1->setTitle("Titulo 1 JAGB");
+$modelNews1->setContent("Contenido Noticia 1");
+$modelNews2 = new news();
+$modelNews2->setTitle("Titulo 2 JAGB");
+$modelNews2->setContent("Contenido Noticia 2");
+$modelNews3 = new news();
+$modelNews3->setTitle("Titulo 3 JAGB");
+$modelNews3->setContent("Contenido Noticia 3");
+$modelNews4 = new news();
+$modelNews4->setTitle("Titulo 4 JAGB");
+$modelNews4->setContent("Contenido Noticia 4");
+
+/*
+ * Borrar hasya aquí
+ * */
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -37,7 +63,6 @@
         <section id="portfolio" class="content-section" style="padding: 29px;">
             <div class="container">
                 <div class="content-section-heading text-center">
-                    <h3 class="text-secondary mb-0">nombre facultad</h3>
                     <h2 class="mb-5">Noticias del campus</h2>
                 </div>
                 <div class="row no-gutters">
@@ -45,8 +70,8 @@
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2>noticia &nbsp;1</h2>
-                                    <p class="mb-0">Descripción de la noticia.</p>
+                                    <h2><?php echo $modelNews1->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews1->getContent(); ?></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-1.jpg"></a>
                     </div>
@@ -54,8 +79,8 @@
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2>noticia 2</h2>
-                                    <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
+                                    <h2><?php echo $modelNews2->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews2->getContent(); ?></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-2.jpg"></a>
                     </div>
@@ -63,8 +88,8 @@
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2>noticia 3</h2>
-                                    <p class="mb-0">Descripción de la noticia.<br></p>
+                                    <h2><?php echo $modelNews3->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews3->getContent(); ?><br></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-2.jpg"></a>
                     </div>
@@ -72,8 +97,8 @@
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2>noticia 4</h2>
-                                    <p class="mb-0">Descripción de la noticia.<br></p>
+                                    <h2><?php echo $modelNews4->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews4->getContent(); ?><br></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-1.jpg"></a>
                     </div>

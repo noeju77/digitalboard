@@ -43,7 +43,7 @@ session_start();
                     <input type="submit" class="btn btn-primary btn-block" role="button" value="Log In" name="login"/>
 
                 </div>
-                <a class="forgot" href="#">¿Ha olvidado su usuario o contraseña?</a>
+                <!-- PENDIENTE DE HACER <a class="forgot" href="#">¿Ha olvidado su usuario o contraseña?</a>-->
 
                 <?php if (isset($_SESSION["validation"]) && $_SESSION["validation"] === false && (isset($_SESSION["error"]))) { ?>
                     <div class="clearfix">&nbsp;</div>

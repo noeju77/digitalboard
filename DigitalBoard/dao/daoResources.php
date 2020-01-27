@@ -1,6 +1,8 @@
 <?php
 
+require_once "../library/conn.php";
 require_once '../model/resources.php';
+require_once '../model/subject.php';
 
 class daoResources {
 
@@ -18,7 +20,6 @@ class daoResources {
 
     public function insertar($objResources) {
 
-
         //aqui paso del objeto resources a las variables individuales
 
         $idTypeResources = $objResources->getIdTypeResources();
@@ -31,13 +32,13 @@ class daoResources {
         $sql = "INSERT INTO resources values(null,'$idTypeResources','$idSubject','$name','$uploadDate','$location','$visibility','$folder')";
         //ejecutamos la consulta y si da error imprimimos dicho error
         if (!$this->conn->query($sql)) {
+            mysqli_close($this->conn);
             return false;
         } else {
-
+            mysqli_close($this->conn);
             return true;
         }
-        //una vez insertado los datos, cerramos la conexion activa
-        mysqli_close($this->conn);
+
     }
 
 //fin insertar
@@ -125,18 +126,20 @@ class daoResources {
 //fin modificar
 
 
-    public function listar() {
+    public function listar($objSubject) {
 
-        $sql = "SELECT * FROM resources"; //un select general
+        $idSubject = $objSubject->getIdSubject();
+
+        $sql = "SELECT * FROM resources WHERE idSubject = '$idSubject'";
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table
 
         $arrayResources = array();
         while ($fila = mysqli_fetch_assoc($resultado)) {
-
             array_push($arrayResources, $fila);
         }
         mysqli_close($this->conn); //cerramos la conexion activa
+
         return $arrayResources;
     }
 

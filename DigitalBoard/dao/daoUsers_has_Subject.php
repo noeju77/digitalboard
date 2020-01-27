@@ -1,5 +1,6 @@
 <?php
 
+require_once "../library/conn.php";
 require_once '../model/users_has_Subject.php';
 require_once "../model/users.php";
 class daoUsers_has_Subject {

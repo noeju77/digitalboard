@@ -1,22 +1,26 @@
 <?php
 
+require_once "../library/conn.php";
 require_once '../model/news.php';
 
-class daoNews {
+class daoNews
+{
 
     public $conObj;
     public $conn;
     var $news;
 
     //constructor 
-    function __construct() {
+    function __construct()
+    {
         $this->conObj = new conn(); //instanciar el objeto
         $this->conn = $this->conObj->getConectar(); //llamo a las propiedades de la conexion
     }
 
     //vamos a trabajar en el crud (create,read,update, delete y list)
 
-    public function insertar($objNews) {
+    public function insertar($objNews)
+    {
 
 
         //aqui paso del objeto news a las variables individuales
@@ -41,7 +45,8 @@ class daoNews {
     }
 
 //fin insertar
-    public function read($objNews) {
+    public function read($objNews)
+    {
 
 
         //aqui paso del objeto news a las variables individuales
@@ -72,7 +77,8 @@ class daoNews {
         mysqli_close($this->conn);
     }
 
-    public function eliminar($objNews) {
+    public function eliminar($objNews)
+    {
 
         //aqui paso del objeto news a las variables individuales
         $idNews = $objNews->getIdNews();
@@ -95,8 +101,8 @@ class daoNews {
 //fin eliminar
 
 
-
-    public function modificar($objNews) {
+    public function modificar($objNews)
+    {
 
 
         //aqui paso del objeto news a las variables individuales
@@ -125,7 +131,8 @@ class daoNews {
 //fin modificar
 
 
-    public function listar() {
+    public function listar()
+    {
 
         $sql = "SELECT * FROM news"; //un select general
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
@@ -140,66 +147,36 @@ class daoNews {
         return $arrayNews;
     }
 
-    public function filterBySubject($objNews) {
-
+    public function filterBySubject($objSubject)
+    {
         //aqui paso del objeto news a las variables individuales
-        $idSubject = $objNews->getIdSubject();
+        $idSubject = $objSubject->getIdSubject();
 
-        echo $sql = " SELECT * FROM  subject s , news n 
- WHERE s.idSubject= n.idSubject AND s.idSubject='$idSubject'  ORDER BY n.publication DESC;";
-        $objMySqlLi = $this->conn->query($sql);
+        $sql = " SELECT * FROM subject s , news n WHERE s.idSubject = n.idSubject AND n.idTypeNews = 2 AND s.idSubject='$idSubject'  ORDER BY n.publication ASC;";
+        $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
+        //los datos los presentaremos en una table
 
-        //ejecutamos la consulta y si da error imprimimos dicho error
-        if ($objMySqlLi->num_rows != 1) {
-            return false;
-        } else {
-            $arrayAux = mysqli_fetch_assoc($objMySqlLi);
-            $objNews->setIdSubject($arrayAux["idSubject"]);
-            $objNews->setIdCourse($arrayAux["idCourse"]);
-            $objNews->setIdTypeSubjects($arrayAux["idTypeSubjects"]);
-            $objNews->setName($arrayAux["name"]);
-            $objNews->setIdNews($arrayAux["idNews"]);
-            $objNews->setIdTypeNews($arrayAux["idTypeNews"]);
-            $objNews->setIdUsers($arrayAux["idUsers"]);
-            $objNews->setIdSubject($arrayAux["idSubject"]);
-            $objNews->setTitle($arrayAux["title"]);
-            $objNews->setContent($arrayAux["content"]);
-            $objNews->setPublication($arrayAux["publication"]);
-            //presentamos el mensaje de insercion con un alert
-            return $objNews;
+        $arrayResources = array();
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            array_push($arrayResources, $fila);
         }
-
-        //una vez consultado los datos, cerramos la conexion activa
-        mysqli_close($this->conn);
+        mysqli_close($this->conn); //cerramos la conexion activa
+        return $arrayResources;
     }
 
-    public function filterBySystem($objNews) {
+    public function filterBySystem()
+    {
+        $sql = "SELECT * FROM news n WHERE  n.idTypeNews = 1 ORDER BY n.publication DESC;";
+        $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
+        //los datos los presentaremos en una table
 
-        //aqui paso del objeto news a las variables individuales
-        $idSubject = $objNews->getIdSubject();
-
-        echo $sql = "   SELECT * FROM  news n 
-        WHERE  n.idSubject='$idSubject' ORDER BY n.publication DESC;";
-        $objMySqlLi = $this->conn->query($sql);
-
-        //ejecutamos la consulta y si da error imprimimos dicho error
-        if ($objMySqlLi->num_rows != 1) {
-            return false;
-        } else {
-
-            $objNews->setIdNews($arrayAux["idNews"]);
-            $objNews->setIdTypeNews($arrayAux["idTypeNews"]);
-            $objNews->setIdUsers($arrayAux["idUsers"]);
-            $objNews->setIdSubject($arrayAux["idSubject"]);
-            $objNews->setTitle($arrayAux["title"]);
-            $objNews->setContent($arrayAux["content"]);
-            $objNews->setPublication($arrayAux["publication"]);
-            //presentamos el mensaje de insercion con un alert
-            return $objNews;
+        $arrayResources = array();
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            array_push($arrayResources, $fila);
         }
+        mysqli_close($this->conn); //cerramos la conexion activa
 
-        //una vez consultado los datos, cerramos la conexion activa
-        mysqli_close($this->conn);
+        return $arrayResources;
     }
 
 }

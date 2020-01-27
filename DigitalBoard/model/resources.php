@@ -6,6 +6,8 @@ require_once "subject.php";
 class resources {
 
     private $idResources;
+    private $idTypeResources;
+    private $idSubject;
     private $uploadDate;
     private $name;
     private $location;
@@ -22,6 +24,26 @@ class resources {
 
     function getFolder() {
         return $this->folder;
+    }
+
+    public function getIdTypeResources()
+    {
+        return $this->idTypeResources;
+    }
+
+    public function setIdTypeResources($idTypeResources)
+    {
+        $this->idTypeResources = $idTypeResources;
+    }
+
+    public function getIdSubject()
+    {
+        return $this->idSubject;
+    }
+
+    public function setIdSubject($idSubject)
+    {
+        $this->idSubject = $idSubject;
     }
 
     function setLocation($location) {

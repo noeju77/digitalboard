@@ -1,7 +1,6 @@
 <?php
 
 require_once "../library/conn.php";
-
 require_once "../model/course.php";
 
 class daoCourse {

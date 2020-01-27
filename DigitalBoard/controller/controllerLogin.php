@@ -27,6 +27,11 @@ if ($_POST["login"]) {
         $objUser->setPassword($password);
         $objUser = $daoUsers->consultaLogin($objUser);
         $_SESSION['user'] = $objUser;
+
+        if($objUser->getIdTypeUsers() !== 1){
+            $url = "../view/principal.php";
+        }
+
         //para esos campos devuelve un objeto de la tabla
         if (!$objUser) {
             $_SESSION['validation'] = false;
