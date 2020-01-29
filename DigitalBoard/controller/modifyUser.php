@@ -1,7 +1,7 @@
 <?php
 
 include_once '../model/users.php';
-include_once '../dao/daoUser.php';
+include_once '../dao/daoUsers.php';
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -10,78 +10,104 @@ ini_set('display_errors', '1');
 //$_SESSION["error"];
 //damos por correcto el formulario
 $_SESSION["validacion"] = true;
+
+
 //como es correcto eliminamos todos los errores
-$_SESSION["errores"] = "";
+$_SESSION["error"] = "";
+$_SESSION["errorNo"] = 0;
 
 $_SESSION["cancelado"] = false;
 
-//validamos los campos y en caso de encontrar un error cambiamos la bandera validacion a false;
-if ($_POST["btonModificar"]) {
+$url_exito = "../view/usuario.php";
 
-    if (empty($_POST["txtIdTypeUsers"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtIdTypeUsers"] = "Debe de completar el campo idTypeUsers.";
+$user1 = $_SESSION['user'];
+
+$daoUsers = new daoUsers;
+
+if (isset($_POST['formPhone'])) {
+    if (isset($_POST['telefono'])) {
+        $filtros = Array(
+            'telefono' => FILTER_SANITIZE_STRING
+        );
+        $result = filter_input_array(INPUT_POST, $filtros);
+        $expresion = '/^((\+?34([ \t|\-])?)?[9|6|7]((\d{1}([ \t|\-])?[0-9]{3})|(\d{2}([ \t|\-])?[0-9]{2}))([ \t|\-])?[0-9]{2}([ \t|\-])?[0-9]{2})$/';
+        if (!preg_match($expresion, $result['telefono'])) {
+            $_SESSION['validation'] = false;
+            $_SESSION['error'] = "Formato de teléfono incorrecto.";
+            $_SESSION['errorNo'] = 1;
+        } else {
+            $user1 = $daoUsers->read($user1);
+            $user1->setPhone($result['telefono']);
+            $daoUsers->modificar($user1);
+        }
     }
-    if (empty($_POST["txtName"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtName"] = "Debe de completar el campo  name.";
-    }
-    if (empty($_POST["txtSurnames"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtSurnames"] = "Debe de completar el campo  surnames.";
-    }
-    if (empty($_POST["txtPhone"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtPhone"] = "Debe de completar el campo phone.";
-    }
-    if (empty($_POST["txtEmail"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtEmail"] = "Debe de completar el campo email.";
-    }
-    if (empty($_POST["txtPassword"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtPassword"] = "Debe de completar el campo password.";
-    }
-    if (empty($_POST["txtState"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["txtState"] = "Debe de completar el campo state.";
-    }
-    if (empty($_POST["fileImage"])) {
-        $_SESSION["validacion"] = false;
-        $_SESSION["errores"]["fileImage"] = "Debe de completar el campo image.";
-    }
-} elseif ($_POST["btonCancelar"]) {
-    $_SESSION["cancelado"] = true;
-    $_SESSION["errores"]["sms"] = "ha cancelado la operación.";
-} else {
-    $_SESSION["validacion"] = false;
-    $_SESSION["errores"]["sms"] = "Petición ajena al sistema.";
 }
 
-if ($_SESSION["validacion"]) {
-    $user1 = new users();
 
-    $user1->setIdTypeUsers($_POST["txtIdTypeUsers"]);
-    $user1->setName($_POST["txtName"]);
-    $user1->setSurnames($_POST["txtSurnames"]);
-    $user1->setPhone($_POST["txtPhone"]);
-    $user1->setEmail($_POST["txtEmail"]);
-    $user1->setPassword($_POST["txtPassword"]);
-    $user1->setState($_POST["txtState"]);
-    $user1->setImage($_POST["fileImage"]);
-    $daoUser = new daoUser();
+if (isset($_POST['formPass'])) {
 
-    $modifyOk = $daoUser->modificar($user1);
-    if (!$modifyOk) {
-        $_SESSION["errores"]["modifyOk"] = "No se ha modificado correctamente";
+    if (isset($_POST['password']) && isset($_POST['passwordNuevo']) && isset($_POST['passwordNuevoBis'])) {
+        $filtros = Array(
+            'password' => FILTER_SANITIZE_STRING,
+            'passwordNuevo' => FILTER_SANITIZE_STRING,
+            'passwordNuevoBis' => FILTER_SANITIZE_STRING
+        );
+        $result = filter_input_array(INPUT_POST, $filtros);
+
+        $user1 = $_SESSION['user'];
+
+        $userPassword = $user1->getPassword();
+
+        if (hash('sha224', $result['password']) == $userPassword) {
+            $passwordOk = 1;
+            if ($result['passwordNuevo'] != $result['passwordNuevoBis']) {
+                $_SESSION['validation'] = false;
+                $_SESSION["error"] = 'Las contraseñas no coinciden.';
+                $_SESSION['errorNo'] = 2;
+            } else {
+                $user1 = $daoUsers->read($user1);
+                $user1->setPassword($result['passwordNuevo']);
+                $daoUsers->modificarWithPassword($user1);
+            }
+        } else {
+            $passwordOk = 0;
+            $_SESSION['validation'] = false;
+            $_SESSION['error'] = 'La contraseña de usuario no es correcta.';
+            $_SESSION['errorNo'] = 2;
+        }
     }
+}
 
-    if ($_SESSION["validacion"] || $_SESSION["cancelado"]) {
+if (isset($_POST['formImage'])) {
 
-        header('Location: ../vista/listaUser.php');
+    $tiposAceptados = Array('image/png', 'image/jpeg', 'image/jpeg', 'image/pjpeg', 'image/bmp');
+    $ruta = time() . "_" . $_FILES['image']['name'];
+    if ($_FILES['image']['error'] <= 0 && array_search($_FILES['image']['type'], $tiposAceptados) && $_FILES['image']['size'] <= 1024 * 1024 * 5) {
+        move_uploaded_file($_FILES['image']['tmp_name'], "../userimg/" . $ruta);
+        $user1 = $_SESSION['user'];
+        $user1->setImage($ruta);
+        $daoUsers->modificar($user1);
     } else {
-        header('Location: ../vista/datosModificados.php');
+        $_SESSION['validation'] = false;
+        $_SESSION["error"] = 'Error al subir el fichero. Tipo no aceptado o excede del tamaño permitido.';
+        $_SESSION['errorNo'] = 3;
     }
 }
-?>
+
+if (!$_SESSION['validation']) {
+    $url = "../view/usuario.php";
+    header('Location: ' . $url);
+} else {
+    header('Location: ' . $url_exito);
+}
+
+
+
+
+
+
+
+
+
+
 

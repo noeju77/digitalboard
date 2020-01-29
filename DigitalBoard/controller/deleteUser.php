@@ -13,11 +13,9 @@ if (isset($_GET["idUsers"])) {
 
     $user1 = new users(); //instancio un obj de la clase subject
     $user1->setIdUsers($_GET["idUsers"]);
-    $daoUsers = new daoUsers();
-    $userDB = $daoUsers->read($user1);
 
     $daoUser = new daoUsers();
-    $deleteOk = $daoUser->eliminar($userDB);
+    $deleteOk = $daoUser->eliminar($user1);
 
     if (!$deleteOk) {
         $_SESSION["errores"]["deleteOk"] = "No se ha eliminado correctamente";

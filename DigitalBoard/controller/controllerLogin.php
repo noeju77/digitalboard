@@ -10,9 +10,9 @@ $url = "../view/admin.php";
 
 if ($_POST["login"]) {
     //validacion de los campos del fomulario que si no estan instanciados o vienen vacios es error
-    if (!isset($_POST["email"]) || empty($_POST["email"]) || !isset($_POST["password"]) || empty($_POST["password"])) {
+    if (!isset($_POST["email"]) || empty($_POST["email"]) || !isset($_POST["password"]) || $_POST["password"] === "") {
         $_SESSION['validation'] = false;
-        $_SESSION['error'] = "Usuario o contraseña incorrectos.";
+        $_SESSION['error'] = "Error al rellenar el formulario.";
     } else {
         $filtros = Array(
             'email' => FILTER_SANITIZE_STRING,
@@ -26,20 +26,27 @@ if ($_POST["login"]) {
         $objUser->setEmail($usuario);
         $objUser->setPassword($password);
         $objUser = $daoUsers->consultaLogin($objUser);
-        $_SESSION['user'] = $objUser;
 
-        if($objUser->getIdTypeUsers() !== 1){
-            $url = "../view/principal.php";
-        }
+        if (gettype($objUser) !== "boolean") {
+            $_SESSION['user'] = $objUser;
 
-        //para esos campos devuelve un objeto de la tabla
-        if (!$objUser) {
+            if ($objUser->getIdTypeUsers() != 1) {
+                $url = "../view/principal.php";
+            }
+
+            //para esos campos devuelve un objeto de la tabla
+            if (!$objUser) {
+                $_SESSION['validation'] = false;
+                $_SESSION['error'] = "Error al rellenar el formulario.";
+            }
+        } else{
             $_SESSION['validation'] = false;
-            $_SESSION['error'] = "Usuario o contraseña incorrectos.";
+                $_SESSION['error'] = "Error al rellenar el formulario.";
         }
     }
 } else {
     $_SESSION['validation'] = false;
+    $_SESSION['error'] = "Error al rellenar el formulario.";
 }
 
 
@@ -49,5 +56,4 @@ if (!$_SESSION['validation']) {
 
 header("Location: " . $url);
 ?>
-
 

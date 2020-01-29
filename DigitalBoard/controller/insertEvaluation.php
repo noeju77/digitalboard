@@ -51,11 +51,6 @@ if ($_SESSION["validacion"]) {
     }
 }
 
-//echo "<pre>";
-//var_dump($subject1);
-//var_dump($_SESSION);
-//echo "</pre>";
-
 if ($_SESSION["validacion"]) {
     header('Location: ' . $url_exito); //se va a la pantalla de admin sin errores
 } else {

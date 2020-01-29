@@ -53,14 +53,38 @@ class daoSubject {
     }
 
 //fin insertar
+    public function readWithoutId($objSubject) {
+
+        $idCourse = $objSubject->getIdCourse();
+        $name = $objSubject->getName();
+        $idTypeSubjects = $objSubject->getIdTypeSubjects();
+
+        $sql = "SELECT * FROM subject where idCourse='$idCourse' AND name = '$name' AND idTypeSubjects = '$idTypeSubjects';";
+        $objMySqlLi = $this->conn->query($sql);
+
+        //ejecutamos la consulta y si da error imprimimos dicho error
+        if ($objMySqlLi->num_rows != 1) {
+            return false;
+        } else {
+            $arrayAux = mysqli_fetch_assoc($objMySqlLi);
+
+            $objSubject->setIdSubject($arrayAux["idSubject"]);
+            $objSubject->setIdCourse($arrayAux["idCourse"]);
+            $objSubject->setIdTypeSubjects($arrayAux["idTypeSubjects"]);
+            $objSubject->setName($arrayAux["name"]);
+
+            //presentamos el mensaje de insercion con un alert
+            return $objSubject;
+        }
+
+        //una vez consultado los datos, cerramos la conexion activa
+        mysqli_close($this->conn);
+    }
+
     public function read($objSubject) {
-
-
-        //aqui paso del objeto subject a las variables individuales
         $idSubject = $objSubject->getIdSubject();
-//ahora creo la sql que ejecutaré para eliminar datos 
 
-        echo $sql = "SELECT * FROM subject where idSubject='$idSubject'";
+        $sql = "SELECT * FROM subject where idSubject='$idSubject';";
         $objMySqlLi = $this->conn->query($sql);
 
         //ejecutamos la consulta y si da error imprimimos dicho error
@@ -89,7 +113,7 @@ class daoSubject {
 
         //ahora creo la sql que ejecutaré para eliminar datos 
 
-        echo $sql = "DELETE FROM subject WHERE idSubject='$idSubject'";
+        $sql = "DELETE FROM subject WHERE idSubject='$idSubject'";
         //ejecutamos la consulta y si da error imprimimos dicho error
         if (!$this->conn->query($sql)) {
             return false;
@@ -147,6 +171,22 @@ class daoSubject {
         }
         mysqli_close($this->conn); //cerramos la conexion activa
         return $arraySubject;
+    }
+
+    public function listByUser($user){
+        $idUser = $user->getIdUsers();
+
+        $sql = "SELECT * FROM subject s, users_has_subject uhs WHERE uhs.idSubject = s.idSubject AND uhs.idUsers = $idUser"; //un select general
+        $resultado3 = $this->conn->query($sql); //guardo los resultados en una variable resultado
+        //los datos los presentaremos en una table
+
+        $arrayUserBySubject = array();
+        while ($fila = mysqli_fetch_assoc($resultado3)) {
+
+            array_push($arrayUserBySubject, $fila);
+        }
+        mysqli_close($this->conn); //cerramos la conexion activa
+        return $arrayUserBySubject;
     }
     
     

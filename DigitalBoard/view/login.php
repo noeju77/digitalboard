@@ -3,7 +3,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
     <head>
         <meta charset="utf-8">
@@ -30,14 +30,14 @@ session_start();
         <div class="login-clean" style="background-color: #f4b903;">
             <form class="border rounded border-primary" method="post" action="../controller/controllerLogin.php">
                 <h2 class="sr-only">Login Form</h2>
-                <div data-bs-hover-animate="jello" class="illustration"><a href="index.html"><i class="icon-graduation" style="color: #114c5e;filter: contrast(100%);"></i></a>
+                <div data-bs-hover-animate="jello" class="illustration"><a href="index.php"><i class="icon-graduation" style="color: #114c5e;filter: contrast(100%);"></i></a>
                     <h1>DigitalBoard</h1>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="email" data-toggle="tooltip" data-bs-tooltip="" data-placement="right" name="email" placeholder="Correo" title="Para acceder introduzca su correo">
+                    <input class="form-control" type="email" data-toggle="tooltip" data-bs-tooltip="" data-placement="right" name="email" placeholder="Correo" required="">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="password" data-toggle="tooltip" data-bs-tooltip="" data-placement="right" name="password" placeholder="Contraseña" title="Para acceder introduzca su contraseña">
+                    <input class="form-control" type="password" data-toggle="tooltip" data-bs-tooltip="" data-placement="right" name="password" placeholder="Contraseña" required="">
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary btn-block" role="button" value="Log In" name="login"/>
@@ -49,7 +49,7 @@ session_start();
                     <div class="clearfix">&nbsp;</div>
                     <div class = "alert alert-danger" role = "alert">
                         <span><?php echo $_SESSION["error"]; ?></span>
-                       
+
                     </div>
                 <?php } ?>
 

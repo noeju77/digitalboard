@@ -1,22 +1,18 @@
 <?php
 include_once '../model/users.php';
+include_once '../controller/readUsersbyType.php';
 
 session_start();
 
-//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-//    header("Location: ../controller/controllerLogOut.php");
-//}
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header("Location: ../controller/controllerLogOut.php");
+}
 
-/*
- * esto es para pruebas, borrar después
- * */
-$modelUser = new users();
-$modelUser->setEmail("jagarbar@alu.upo.es");
-$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
+$modelUser = $_SESSION['user'];
 
-/*
- * Borrar hasya aquí
- * */
+$students = filterByIdTypeUser(3);
+$teachers = filterByIdTypeUser(2);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -56,7 +52,7 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                         <li class="nav-item" role="presentation"><a class="nav-link" href="admin.php" style="font-size: 20px;">Administrar</a></li>
                         <li class="nav-item" role="presentation"></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../userimg/<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                         <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                         <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
@@ -70,11 +66,28 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
         <div class="card shadow flex-row mb-3" style="margin-bottom: 0px;width: 90%;margin-left: 50px;">
             <div class="card-body" style="width: 45%;">
                 <h1 style="font-size: 30px;">Datos Asignatura</h1>
-                <form style="margin-top: 29px;"><label for="city" style="width: 100%;"><strong>Tipo Asignatura</strong><br></label><select class="form-control" style="margin-left: 30px;width: 125px;" required=""><optgroup label="Tipo Asignatura"><option value="1" selected="">Básica</option><option value="2">Obligatoria</option><option value="3">Optativa</option><option value="4">TFG</option><option value="5">TFM</option></optgroup></select>
-                    <label
-                        for="city" style="width: 100%;"><strong>Curso</strong><br></label><select class="form-control" style="margin-left: 30px;width: 125px;" required=""><optgroup label="Curso"><option value="1" selected="">Primero</option><option value="2">Segundo</option><option value="3">Tercero</option><option value="4">Cuarto</option></optgroup></select>
-                    <label
-                        for="city" style="margin-top: 16px;"><strong>Nombre&nbsp;</strong><br></label><input class="form-control" type="text" placeholder="Introduzca su nombre" required="" style="width: 100%;">
+                <form style="margin-top: 29px;" action="../controller/insertSubject.php" method="post">
+                    <label for="city" style="width: 100%;"><strong>Tipo Asignatura</strong><br></label>
+                    <select class="form-control" style="margin-left: 30px;width: 125px;" required="" name="TipoAsignatura">
+                        <optgroup label="Tipo Asignatura">
+                            <option value="1">Básica</option>
+                            <option value="2">Obligatoria</option>
+                            <option value="3">Optativa</option>
+                            <option value="4">TFG</option>
+                            <option value="5">TFM</option>
+                        </optgroup>
+                    </select>
+                    <label for="city" style="width: 100%;"><strong>Curso</strong><br></label>
+                    <select class="form-control" style="margin-left: 30px;width: 125px;" required="" name="curso">
+                        <optgroup label="Curso">
+                            <option value="1">Primero</option>
+                            <option value="2">Segundo</option>
+                            <option value="3">Tercero</option>
+                            <option value="4">Cuarto</option>
+                        </optgroup>
+                    </select>
+                    <label for="city" style="margin-top: 16px;"><strong>Nombre&nbsp;</strong><br></label>
+                    <input class="form-control" type="text" placeholder="Introduzca su nombre" required="" name="nombre" style="width: 100%;">
                     <div>
                         <h1 style="font-size: 30px;padding-top: 30px;width: 100%;">Seleccione los Alumnos</h1>
                         <div class="table-responsive" style="margin-top: 30px;width: 100%;">
@@ -88,22 +101,61 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>García Castillo</td>
-                                        <td>Andrea</td>
-                                        <td>correo</td>
-                                        <td class="text-center"><input type="checkbox" name="alumnos[0]"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lozano&nbsp;</td>
-                                        <td>Mari Carmen</td>
-                                        <td>corroe</td>
-                                        <td class="text-center"><input type="checkbox" name="alumnos[1]"></td>
-                                    </tr>
+                                <?php
+                                    $i = 0;
+                                    foreach ($students as $student) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $student['surnames']; ?></td>
+                                            <td><?php echo $student['name']; ?></td>
+                                            <td><?php echo $student['email']; ?></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="alumnos[<?php echo $i; ?>]" value="<?php echo $student['idUsers']; ?>"/>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    }
+                                ?>
                                 </tbody>
                             </table>
                         </div>
-                    </div><button class="btn btn-primary" type="button" style="margin: 0px;margin-top: 0px;">Guardar</button></form>
+                    </div>
+                    <div>
+                        <h1 style="font-size: 30px;padding-top: 30px;width: 100%;">Seleccione los Profesores</h1>
+                        <div class="table-responsive" style="margin-top: 30px;width: 100%;">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Apellidos</th>
+                                    <th>Nombre</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Incluir</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $i = 0;
+                                foreach ($teachers as $teacher) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $teacher['surnames']; ?></td>
+                                        <td><?php echo $teacher['name']; ?></td>
+                                        <td><?php echo $teacher['email']; ?></td>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="profesores[<?php echo $i; ?>]" value="<?php echo $teacher['idUsers']; ?>"/>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $i++;
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit" style="margin: 0px;margin-top: 0px;">Guardar</button>
+                </form>
             </div>
         </div>
         <footer class="border rounded footer text-center">

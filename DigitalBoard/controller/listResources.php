@@ -10,5 +10,5 @@ function listResourcesBySubject($idSubject){
 
     $daoResources = new daoResources();
 
-    return $daoResources->listar($objSubject);
+    return $daoResources->listar($objSubject->getIdCourse());
 }

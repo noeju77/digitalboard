@@ -1,23 +1,25 @@
 <?php
 include_once '../model/users.php';
+include_once '../controller/listUsersBySubject.php';
+include_once '../controller/filterByUser.php';
 
 session_start();
 
-//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-//    header("Location: ../controller/controllerLogOut.php");
-//}
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header("Location: ../controller/controllerLogOut.php");
+}
 
-/*
- * esto es para pruebas, borrar después
- * */
-$modelUser = new users();
-$modelUser->setEmail("jagarbar@alu.upo.es");
-$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
+$modelUser = $_SESSION['user'];
 
-/*
- * Borrar hasya aquí
- * */
+if ($modelUser->getIdTypeUsers() == 1) {
+    header("Location: ../view/admin.php");
+}
+
+$listSubject = listSubjectByUser($modelUser);
+$listNews = listNewsByUser($modelUser);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -52,7 +54,7 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../userimg/<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
@@ -61,44 +63,44 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
         </div>
     </nav>
     <div class="col d-flex flex-wrap" style="margin-right: 0px;margin-top: 150px;margin-bottom: 30px;">
-        <h1 style="margin-left: 10px;font-size: 30px;">Curso</h1>
+        <h1 style="margin-left: 10px;font-size: 30px;">Principal: <?php $user1 = $_SESSION["user"]; 
+                echo '<i>'. $user1->getName($user1).' '. $user1->getSurnames($user1).'</i>';
+                ?></h1>
     </div>
     <div style="padding-top: 50px;padding-bottom: 50px;margin-top: 0px;">
         <div class="container d-flex flex-column flex-nowrap">
             <div class="row justify-content-start" style="margin-right: 0px;margin-left: 0px;">
                 <div class="col" style="width: 30%;padding: 0px;padding-right: 0px;min-width: 30%;max-width: 30%;">
                     <h1 style="font-size: 30px;">Noticias</h1>
-                    <div role="tablist" id="accordion-2" style="min-width: 40%;">
+                    <div role="tablist" id="accordion-2"
+                        style="min-width: 40%;">
+
+                        <?php
+
+                        $i = 0;
+                        foreach($listNews as $new){
+
+                        ?>
+
                         <div class="card">
                             <div class="card-header" role="tab">
-                                <h5 class="mb-0"><a data-toggle="collapse" aria-expanded="true" aria-controls="accordion-2 .item-1" href="#accordion-2 .item-1">Noticia 1 Asignatura 1</a></h5>
+                                <h5 class="mb-0"><a data-toggle="collapse" aria-expanded="true"
+                                                    aria-controls="accordion-2 .item-<?php echo $i;?>" href="#accordion-2 .item-<?php echo $i;?>"><?php echo $new['title']; ?></a>
+                                </h5>
                             </div>
-                            <div class="collapse show item-1" role="tabpanel" data-parent="#accordion-2">
+                            <div class="collapse show item-<?php echo $i;?>" role="tabpanel" data-parent="#accordion-2">
                                 <div class="card-body">
-                                    <p class="card-text">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
+                                    <p class="card-text"><?php echo $new['content']; ?></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header" role="tab">
-                                <h5 class="mb-0"><a data-toggle="collapse" aria-expanded="false" aria-controls="accordion-2 .item-2" href="#accordion-2 .item-2">Noticia 1 Asignatura 2</a></h5>
-                            </div>
-                            <div class="collapse item-2" role="tabpanel" data-parent="#accordion-2">
-                                <div class="card-body">
-                                    <p class="card-text">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" role="tab">
-                                <h5 class="mb-0"><a data-toggle="collapse" aria-expanded="false" aria-controls="accordion-2 .item-3" href="#accordion-2 .item-3">Noticia 1 Asignatura 3</a></h5>
-                            </div>
-                            <div class="collapse item-3" role="tabpanel" data-parent="#accordion-2">
-                                <div class="card-body">
-                                    <p class="card-text">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
-                                </div>
-                            </div>
-                        </div>
+
+                        <?php
+                            $i++;
+                        }
+
+                        ?>
+
                     </div>
                 </div>
                 <div class="col-md-3" style="margin-left: 0px;min-width: 70%;max-width: 70%;width: 70%;padding-right: 0px;padding-left: 50px;">
@@ -111,10 +113,16 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                             <div class="collapse show item-1" role="tabpanel" data-parent="#accordion-1">
                                 <div class="card-body">
                                     <ul>
-                                        <li>Item 1</li>
-                                        <li>Item 2</li>
-                                        <li>Item 3</li>
-                                        <li>Item 4</li>
+                                        <?php
+                                            foreach ($listSubject as $subject) {
+                                                ?>
+
+                                                <a href="asignatura.php?idSubject=<?php echo $subject['idSubject'] ?>">
+                                                <li><?php echo $subject['name'] ?></li>
+                                                </a>
+                                                <?php
+                                            }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
@@ -143,4 +151,3 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
 </body>
 
 </html>
-

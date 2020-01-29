@@ -1,31 +1,15 @@
 <?php
 
 include_once '../model/news.php';
+include_once '../controller/listNews.php';
 
-/*
- * esto es para pruebas, borrar después
- * */
-$modelNews1 = new news();
-$modelNews1->setTitle("Titulo 1 JAGB");
-$modelNews1->setContent("Contenido Noticia 1");
-$modelNews2 = new news();
-$modelNews2->setTitle("Titulo 2 JAGB");
-$modelNews2->setContent("Contenido Noticia 2");
-$modelNews3 = new news();
-$modelNews3->setTitle("Titulo 3 JAGB");
-$modelNews3->setContent("Contenido Noticia 3");
-$modelNews4 = new news();
-$modelNews4->setTitle("Titulo 4 JAGB");
-$modelNews4->setContent("Contenido Noticia 4");
+$modelNews1 = listSiSystemNews();
 
-/*
- * Borrar hasya aquí
- * */
 ?>
 
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
     <head>
         <meta charset="utf-8">
@@ -57,7 +41,7 @@ $modelNews4->setContent("Contenido Noticia 4");
                     <h1 class="flex-wrap tada animated mb-5" style="margin: 0px;margin-bottom: 0px;font-size: 54px;margin-left: 0px;color: rgb(0,0,0);width: auto;height: auto;margin-top: 0px;padding: 0px;">DigitalBoard</h1>
                 </div>
                 <div class="content-section-heading text-center" style="height: 50;">
-                    <h2 class="flex-wrap mb-5" style="margin: 0px;margin-bottom: 0px;font-size: 30px;margin-left: 0px;margin-top: 30px;">Estudiar es fácil....sobre todo PA.</h2><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="login.php" style="width: auto;height: auto;">Log In</a></div>
+                    <h2 class="flex-wrap mb-5" style="margin: 0px;margin-bottom: 0px;font-size: 30px;margin-left: 0px;margin-top: 30px;">Con DigitalBoard estudiar es fácil....sobre todo PA.</h2><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="../view/login.php" style="width: auto;height: auto;">Log In</a></div>
             </div>
         </section>
         <section id="portfolio" class="content-section" style="padding: 29px;">
@@ -70,8 +54,8 @@ $modelNews4->setContent("Contenido Noticia 4");
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2><?php echo $modelNews1->getTitle(); ?></h2>
-                                    <p class="mb-0"><?php echo $modelNews1->getContent(); ?></p>
+                                    <h2><?php echo $modelNews1[0]->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews1[0]->getContent(); ?></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-1.jpg"></a>
                     </div>
@@ -79,8 +63,8 @@ $modelNews4->setContent("Contenido Noticia 4");
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2><?php echo $modelNews2->getTitle(); ?></h2>
-                                    <p class="mb-0"><?php echo $modelNews2->getContent(); ?></p>
+                                    <h2><?php echo $modelNews1[1]->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews1[1]->getContent(); ?></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-2.jpg"></a>
                     </div>
@@ -88,8 +72,8 @@ $modelNews4->setContent("Contenido Noticia 4");
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2><?php echo $modelNews3->getTitle(); ?></h2>
-                                    <p class="mb-0"><?php echo $modelNews3->getContent(); ?><br></p>
+                                    <h2><?php echo $modelNews1[2]->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews1[2]->getContent(); ?><br></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-2.jpg"></a>
                     </div>
@@ -97,8 +81,8 @@ $modelNews4->setContent("Contenido Noticia 4");
                         <a class="portfolio-item" href="#">
                             <div class="caption">
                                 <div class="caption-content">
-                                    <h2><?php echo $modelNews4->getTitle(); ?></h2>
-                                    <p class="mb-0"><?php echo $modelNews4->getContent(); ?><br></p>
+                                    <h2><?php echo $modelNews1[3]->getTitle(); ?></h2>
+                                    <p class="mb-0"><?php echo $modelNews1[3]->getContent(); ?><br></p>
                                 </div>
                             </div><img class="img-fluid" src="../assets/img/portfolio-1.jpg"></a>
                     </div>

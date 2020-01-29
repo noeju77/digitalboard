@@ -41,7 +41,7 @@ class daoUsers {
         $email = $objUser->getEmail();
         $password = $objUser->getPassword();
         $state = $objUser->getState();
-        $image = $objUser->getImage();
+        $image = 'default.jpeg';
 
         //ahora creo la sql que ejecutaré para insertar datos, 
         //se supone que cada variable ya tienen valores
@@ -91,36 +91,19 @@ class daoUsers {
     }
 
     public function readWithTypeUser($objUser) {
-
-
-
         $idTypeUsers = $objUser->getIdTypeUsers();
 
+        $sql = "SELECT * FROM users  WHERE idTypeUsers = '$idTypeUsers';";
+        $resultado3 = $this->conn->query($sql); //guardo los resultados en una variable resultado
+        //los datos los presentaremos en una table
 
-        echo $sql = "SELECT * FROM users  WHERE idTypeUsers = '$idTypeUsers';";
-        $objMySqlLi = $this->conn->query($sql);
+        $arrayUserBySubject = array();
+        while ($fila = mysqli_fetch_assoc($resultado3)) {
 
-
-        if ($objMySqlLi->num_rows != 1) {
-            return false;
-        } else {
-            $arrayAux = mysqli_fetch_assoc($objMySqlLi);
-
-            $objUser->setIdUsers($arrayAux["idUsers"]);
-            $objUser->setIdTypeUsers($arrayAux["idTypeUsers"]);
-            $objUser->setName($arrayAux["name"]);
-            $objUser->setSurnames($arrayAux["surnames"]);
-            $objUser->setPhone($arrayAux["phone"]);
-            $objUser->setEmail($arrayAux["email"]);
-            $objUser->setPassword($arrayAux["password"]);
-            $objUser->setState($arrayAux["state"]);
-            $objUser->setImage($arrayAux["image"]);
-
-            return $objUser;
+            array_push($arrayUserBySubject, $fila);
         }
-
-
-        mysqli_close($this->conn);
+        mysqli_close($this->conn); //cerramos la conexion activa
+        return $arrayUserBySubject;
     }
 
     public function eliminar($objUser) {
@@ -130,7 +113,7 @@ class daoUsers {
 
         //ahora creo la sql que ejecutaré para eliminar datos 
 
-        echo $sql = "DELETE FROM users WHERE idUsers='$idUsers'";
+        echo $sql = "UPDATE users SET state = '1' WHERE idUsers = '$idUsers'";
         //ejecutamos la consulta y si da error imprimimos dicho error
         if (!$this->conn->query($sql)) {
             return false;
@@ -209,7 +192,7 @@ class daoUsers {
 
     public function listar() {
 
-        $sql = "SELECT * FROM users"; //un select general
+        $sql = "SELECT * FROM users WHERE state = 0"; //un select general
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table
 
@@ -263,7 +246,7 @@ class daoUsers {
 
     function consultaLogin($user) {
 
-        $sql = "SELECT u.*, tu.name AS typename FROM users u, typeusers tu WHERE tu.idTypeUsers=u.idTypeUsers AND email = '" . $user->getEmail() . "' AND password=SHA2('" . $user->getPassword() . "', 224) LIMIT 1";
+        $sql = "SELECT u.*, tu.name AS typename FROM users u, typeusers tu WHERE tu.idTypeUsers=u.idTypeUsers AND email = '" . $user->getEmail() . "' AND password=SHA2('" . $user->getPassword() . "', 224) AND state = 0 LIMIT 1";
         $objUser = new users();
         $objTypeUsers = new typeUsers();
         $objMySqlLi = $this->conn->query($sql);

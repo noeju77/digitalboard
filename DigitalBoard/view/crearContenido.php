@@ -3,20 +3,18 @@ include_once '../model/users.php';
 
 session_start();
 
-//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-//    header("Location: ../controller/controllerLogOut.php");
-//}
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header("Location: ../controller/controllerLogOut.php");
+}
 
-/*
- * esto es para pruebas, borrar después
- * */
-$modelUser = new users();
-$modelUser->setEmail("jagarbar@alu.upo.es");
-$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
+$modelUser = $_SESSION['user'];
 
-/*
- * Borrar hasya aquí
- * */
+if ($modelUser->getIdTypeUsers() == 1) {
+    header("Location: ../view/admin.php");
+} elseif ($modelUser->getIdTypeUsers() == 3){
+    header("Location: ../view/principal.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,11 +48,11 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                     class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav flex-grow-1 justify-content-between flex-nowrap" style="margin-top: 16px;">
                         <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="principal.php"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" style="font-size: 20px;"><button onclick="javascript:window.history.back();" >Asignatura</button></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="admin.php" style="font-size: 20px;">Principal</a></li>
                         <li class="nav-item" role="presentation"></li>
                         <li class="nav-item" role="presentation"></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../userimg/<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                         <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                         <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
@@ -80,7 +78,7 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                             </optgroup>
                         </select>
                         <label for="city" style="margin-top: 30px;width: 100%;margin-bottom: 0px;"><strong>Título</strong><br></label>
-                        <input type="text" placeholder="Título contenido" required="" name="tituloContenido" style="margin-left: 0px;width: 100%;">
+                        <input class="form-control" type="text" placeholder="Título contenido" required="" name="tituloContenido" style="margin-left: 0px;width: 100%;">
                         <label for="city" style="width: 100%;margin-top: 10px;"><strong>Subir Fichero</strong><br></label>
                         <input class="bg-warning" type="file" style="width: 100%;" name="fichero" required="">
                         <button class="btn btn-primary" type="submit" style="margin: 0px;margin-top: 40px;" name="btonInsertar">Guardar</button>

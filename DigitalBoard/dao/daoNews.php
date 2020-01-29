@@ -134,7 +134,7 @@ class daoNews
     public function listar()
     {
 
-        $sql = "SELECT * FROM news"; //un select general
+        $sql = "SELECT n.title, n.content FROM news n WHERE n.idTypeNews = 1 ORDER BY n.publication DESC LIMIT 4 ; "; //un select general
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table
 
@@ -152,7 +152,7 @@ class daoNews
         //aqui paso del objeto news a las variables individuales
         $idSubject = $objSubject->getIdSubject();
 
-        $sql = " SELECT * FROM subject s , news n WHERE s.idSubject = n.idSubject AND n.idTypeNews = 2 AND s.idSubject='$idSubject'  ORDER BY n.publication ASC;";
+        $sql = " SELECT * FROM subject s , news n WHERE s.idSubject = n.idSubject AND n.idTypeNews = 2 AND s.idSubject='$idSubject'  ORDER BY n.publication DESC;";
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table
 
@@ -167,6 +167,28 @@ class daoNews
     public function filterBySystem()
     {
         $sql = "SELECT * FROM news n WHERE  n.idTypeNews = 1 ORDER BY n.publication DESC;";
+        $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
+        //los datos los presentaremos en una table
+
+        $arrayResources = array();
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            array_push($arrayResources, $fila);
+        }
+        mysqli_close($this->conn); //cerramos la conexion activa
+
+        return $arrayResources;
+    }
+
+    public function fiterByUser($user){
+
+        $idUsers = $user->getIdUsers();
+
+        $sql = "SELECT s.name, n.title, n.content 
+                FROM subject s, users_has_subject uhs, news n 
+                WHERE s.idSubject = uhs.idSubject AND uhs.idSubject = n.idSubject AND n.idTypeNews = 2 
+                    AND uhs.idUsers = $idUsers
+                ORDER BY n.publication DESC;";
+
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table
 

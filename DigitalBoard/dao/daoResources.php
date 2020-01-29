@@ -29,7 +29,10 @@ class daoResources {
         $location = $objResources->getLocation();
         $visibility = $objResources->getVisibility();
         $folder = $objResources->getFolder();
-        $sql = "INSERT INTO resources values(null,'$idTypeResources','$idSubject','$name','$uploadDate','$location','$visibility','$folder')";
+
+        $sql = "INSERT INTO resources (idResources, idTypeResources, idSubject, uploadDate, name, location, visibility, folder) 
+                VALUES (NULL, '$idTypeResources', '$idSubject', '$uploadDate', '$name', '$location', '$visibility', '$folder')";
+
         //ejecutamos la consulta y si da error imprimimos dicho error
         if (!$this->conn->query($sql)) {
             mysqli_close($this->conn);
@@ -126,10 +129,7 @@ class daoResources {
 //fin modificar
 
 
-    public function listar($objSubject) {
-
-        $idSubject = $objSubject->getIdSubject();
-
+    public function listar($idSubject) {
         $sql = "SELECT * FROM resources WHERE idSubject = '$idSubject'";
         $resultado = $this->conn->query($sql); //guardo los resultados en una variable resultado
         //los datos los presentaremos en una table

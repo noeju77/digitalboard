@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-01-2020 a las 14:55:15
+-- Tiempo de generación: 29-01-2020 a las 10:48:00
 -- Versión del servidor: 10.1.40-MariaDB
 -- Versión de PHP: 7.3.5
 
@@ -139,9 +139,7 @@ INSERT INTO `news` (`idNews`, `idTypeNews`, `idUsers`, `idSubject`, `title`, `co
 (3, 1, 2, 0, 'Concierto de Cuarteto de Cuerda OREMUS en el paraninfo', 'El viernes 24 es el concierto de la Orquesta de la UPO, el acceso es gratis hasta completar aforo.', '2020-01-20 23:00:00'),
 (4, 1, 2, 0, 'Jornada de Teatro en el paraninfo', 'El martes 28 es la obra La Casa de Bernarda Alba, el acceso es gratis hasta completar aforo.', '2020-01-20 23:00:00'),
 (11, 2, 14, 21, 'Notas Examen Final', 'Se ha publicado en el apartado Notas, el listado de los alumnos con sus  respectivas calificaciones.', '2029-01-19 23:00:00'),
-(15, 2, 16, 23, 'Entrega EPD1', 'Se pospone la entrega dos semanas.', '2029-01-19 23:00:00'),
-(18, 2, 16, 26, 'Notas Examen EB', 'Se ha publicado en el apartado Notas las notas del examen de EB.', '2029-01-19 23:00:00'),
-(21, 2, 16, 23, 'Horario de TutorÃ­as', 'Durante el mes de febrero las turorÃ­as serÃ¡n los martes de 17:00 a 19:00.', '2029-01-19 23:00:00');
+(13, 2, 16, 23, 'Entrega EPD1', 'Se pospone la entrega de la EPD1 dos semans.', '2029-01-19 23:00:00');
 
 -- --------------------------------------------------------
 
@@ -159,16 +157,6 @@ CREATE TABLE `resources` (
   `visibility` int(1) NOT NULL,
   `folder` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `resources`
---
-
-INSERT INTO `resources` (`idResources`, `idTypeResources`, `idSubject`, `uploadDate`, `name`, `location`, `visibility`, `folder`) VALUES
-(6, 1, 23, '2029-01-20', 'PresentaciÃ³n', '1580298151_IntroduccioÌnALaAsignatura.pdf', 0, 'GENERAL'),
-(7, 1, 23, '2029-01-20', 'Tema 1', '1580298213_Tema 1 - Clase de repaso Flipped Learning.pdf', 0, 'EB'),
-(8, 1, 23, '2029-01-20', 'EPD 1', '1580300551_epd01.pdf', 0, 'EPD'),
-(9, 1, 23, '2029-01-20', 'Nota EB', '1580300585_CalificacionesEPD1.pdf', 0, 'NOTAS');
 
 -- --------------------------------------------------------
 
@@ -389,11 +377,10 @@ INSERT INTO `users` (`idUsers`, `idTypeUsers`, `name`, `surnames`, `phone`, `ema
 (13, 1, 'Andrea', 'GarcÃ­a Castillo', '955555557', 'agarcas@admin.upo.es', 'a76654d8e3550e9a2d67a0eeb6c67b220e5885eddd3fde135806e601', '0', '1580288686_andrea_foto.jpeg'),
 (14, 2, 'Andrea', 'GarcÃ­a Castillo', '', 'agarcas@prof.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
 (15, 2, 'Mari Carmen', 'Lozano Espejo', '', 'mclozesp@prof.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
-(16, 2, 'Juan Alberto', 'GarcÃ­a Barroso', '676767676', 'jagarbar@prof.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
+(16, 2, 'Juan Alberto', 'GarcÃ­a Barroso', '', 'jagarbar@prof.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
 (17, 3, 'Andrea', 'GarcÃ­a Castillo', '', 'agarcas@alu.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
 (18, 3, 'Mari Carmen', 'Lozano Espejo', '', 'mclozesp@alu.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
-(19, 3, 'Juan Alberto', 'GarcÃ­a Barroso', '', 'jagarbar@alu.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg'),
-(20, 3, 'Alumno', 'Para Borrar', '', 'alpabo@alu.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '1', 'default.jpeg');
+(19, 3, 'Juan Alberto', 'GarcÃ­a Barroso', '', 'jagarbar@alu.upo.es', '99fb2f48c6af4761f904fc85f95eb56190e5d40b1f44ec3a9c1fa319', '0', 'default.jpeg');
 
 -- --------------------------------------------------------
 
@@ -620,13 +607,13 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT de la tabla `news`
 --
 ALTER TABLE `news`
-  MODIFY `idNews` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idNews` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `resources`
 --
 ALTER TABLE `resources`
-  MODIFY `idResources` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idResources` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `results`
@@ -686,7 +673,7 @@ ALTER TABLE `university`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `idUsers` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idUsers` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `users_has_subject`

@@ -5,6 +5,16 @@ require_once '../model/users_has_Subject.php';
 require_once "../model/users.php";
 class daoUsers_has_Subject {
 
+    public $conObj;
+    public $conn;
+    private $subject;
+
+    //constructor
+    function __construct() {
+        $this->conObj = new conn(); //instanciar el objeto
+        $this->conn = $this->conObj->getConectar(); //llamo a las propiedades de la conexion
+    }
+
     public function insertarSubject($objUHS) {
 
 

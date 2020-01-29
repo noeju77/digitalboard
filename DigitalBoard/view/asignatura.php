@@ -2,60 +2,24 @@
 include_once '../model/users.php';
 include_once '../model/news.php';
 include_once '../model/resources.php';
+include_once '../model/subject.php';
 include_once '../controller/listResources.php';
 include_once '../controller/filterBySubject.php';
+include_once '../controller/readSubject.php';
 
 session_start();
 
-//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-//    header("Location: ../controller/controllerLogOut.php");
-//}
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header("Location: ../controller/controllerLogOut.php");
+}
 
-/*
-* esto es para pruebas, borrar después
-* */
-$modelUser = new users();
-$modelUser->setEmail("jagarbar@alu.upo.es");
-$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
-//$modelUser->setIdTypeUsers(2);
+$modelUser = $_SESSION['user'];
 
-//for($i = 0; $i<2; $i++){
-//    $new = new news();
-//
-//    $new->setTitle("Titulo ". $i);
-//    $new->setContent("Contenido ". $i);
-//
-//    $news[$i] = $new;
-//}
-//
-//$source1 = new resources();
-//$source2 = new resources();
-//$source3 = new resources();
-//
-//$source1->setName("Guía Docente");
-//$source2->setName("EB 1");
-//$source3->setName("EPD 01");
-//
-//$source1->setFolder("GENERAL");
-//$source2->setFolder("EB");
-//$source3->setFolder("EPD");
-//
-//$source1->setLocation("guiaDocente.pdf");
-//$source2->setLocation("eb1.pdf");
-//$source3->setLocation("epd1.pef");
-//
-//$sources[0]= $source1;
-//$sources[1]= $source2;
-//$sources[2]= $source3;
+$idSubject = $_GET['idSubject'];
 
-/*
-* Borrar hasta aquí
-* */
-
-//$_GET['idSubject'] = 1;
-
-$news = listNewsBySubject(1);
-$sources = listResourcesBySubject(1);
+$news = listNewsBySubject($idSubject);
+$sources = listResourcesBySubject($idSubject);
+$subject = readSubject($idSubject);
 
 ?>
 
@@ -89,12 +53,12 @@ $sources = listResourcesBySubject(1);
             <div
                 class="collapse navbar-collapse" id="menu">
                 <ul class="nav navbar-nav flex-grow-1 justify-content-between flex-nowrap" style="margin-top: 16px;">
-                    <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="index.html"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" style="font-size: 20px;"><button onclick="javascript:window.history.back();" >Asignatura</button></a></li>
+                    <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="principal.php"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="admin.php" style="font-size: 20px;">Principal</a></li>                    <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.html" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../userimg/<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
@@ -103,7 +67,7 @@ $sources = listResourcesBySubject(1);
         </div>
     </nav>
     <div class="col d-flex flex-wrap" style="margin-right: 0px;margin-top: 150px;margin-bottom: 30px;">
-        <h1 style="margin-left: 10px;font-size: 30px;">Nombre Asignatura</h1>
+        <h1 style="margin-left: 10px;font-size: 30px;"><?php echo $subject->getName();?></h1>
     </div>
     <div style="padding-top: 30px;padding-bottom: 50px;margin-top: 0px;">
         <div class="container d-flex flex-column flex-nowrap">
@@ -113,11 +77,11 @@ $sources = listResourcesBySubject(1);
 
                         <?php
 
-                        if($modelUser->getIdTypeUsers() === 2) {
+                        if($modelUser->getIdTypeUsers() === "2") {
 
                             ?>
 
-                            <a href="crearNoticia.html" style="width: auto;font-size: 30px;margin-left: 30px;">
+                            <a href="crearNoticia.php?idSubject=<?php echo $idSubject; ?>" style="width: auto;font-size: 30px;margin-left: 30px;">
                                 <button class="btn btn-primary" type="button" style="margin-left: 0px;">Crear Noticia
                                 </button>
                             </a>
@@ -143,12 +107,11 @@ $sources = listResourcesBySubject(1);
 
                                     <?php
 
-                                    if($modelUser->getIdTypeUsers() === 2) {
+                                    if($modelUser->getIdTypeUsers() === "2") {
 
                                     ?>
 
-                                    <a><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i></a>
-                                    <a><i class="fa fa-edit" style="margin-left: 20px;"></i></a>
+                                    <a href="../controller/deleteNews.php?idNews=<?php echo $new['idNews']; ?>&idSubject=<?php echo $idSubject; ?>"><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i></a>
 
                                         <?php
                                     }
@@ -172,21 +135,16 @@ $sources = listResourcesBySubject(1);
                     </div>
                 </div>
                 <div class="col-md-3" style="margin-left: 0px;min-width: 70%;max-width: 70%;width: 70%;padding-right: 0px;padding-left: 50px;">
-
-                    <?php
-                    print_r($sources);
-                    ?>
-
                     <h1 style="font-size: 30px;">Contenido
 
                         <?php
 
-                        if($modelUser->getIdTypeUsers() === 2) {
+                        if($modelUser->getIdTypeUsers() === "2") {
 
                         ?>
 
-                        <a href="crearContenido.html" style="width: auto;font-size: 30px;margin-left: 30px;">
-                            <button class="btn btn-primary" type="button" style="margin-left: 0px;">Crear Noticia</button>
+                        <a href="crearContenido.php?idSubject=<?php echo $idSubject; ?>" style="width: auto;font-size: 30px;margin-left: 30px;">
+                            <button class="btn btn-primary" type="button" style="margin-left: 0px;">Crear Contenido</button>
                         </a>
 
                             <?php
@@ -209,20 +167,18 @@ $sources = listResourcesBySubject(1);
                                         $i = 0;
                                         foreach($sources as $source){
 
-                                            if($source->getFolder() === "GENERAL"){
+                                            if($source['folder'] === "GENERAL"){
                                         ?>
 
-                                                <li><a href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
+                                        <li><a target="_blank" href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
 
                                                     <?php
 
-                                                    if ($modelUser->getIdTypeUsers() === 2) {
+                                                    if ($modelUser->getIdTypeUsers() === "2") {
 
                                                         ?>
 
-                                                        <i class="fa fa-trash-o"
-                                                           style="padding-left: 0px;margin-left: 28px;"></i>
-                                                        <i class="fa fa-edit" style="margin-left: 20px;"></i>
+                                                        <a href="../controller/deleteSource.php?idResource=<?php echo $source['idResources']; ?>&idSubject=<?php echo $idSubject; ?>"><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i><a/>
 
                                                         <?php
                                                     }
@@ -253,20 +209,18 @@ $sources = listResourcesBySubject(1);
                                         $i = 0;
                                         foreach($sources as $source){
 
-                                            if($source->getFolder() === "EB"){
+                                            if($source['folder'] === "EB"){
                                                 ?>
 
-                                                <li><a href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
+                                                <li><a target="_blank" href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
 
                                                     <?php
 
-                                                    if ($modelUser->getIdTypeUsers() === 2) {
+                                                    if ($modelUser->getIdTypeUsers() === "2") {
 
                                                         ?>
 
-                                                        <i class="fa fa-trash-o"
-                                                           style="padding-left: 0px;margin-left: 28px;"></i>
-                                                        <i class="fa fa-edit" style="margin-left: 20px;"></i>
+                                                    <a href="../controller/deleteSource.php?idResource=<?php echo $source['idResources']; ?>&idSubject=<?php echo $idSubject; ?>"><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i><a/>
 
                                                         <?php
                                                     }
@@ -296,20 +250,18 @@ $sources = listResourcesBySubject(1);
                                         $i = 0;
                                         foreach($sources as $source){
 
-                                            if($source->getFolder() === "EPD"){
+                                            if($source['folder'] === "EPD"){
                                                 ?>
 
-                                                <li><a href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
+                                                <li><a target="_blank" href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
 
                                                     <?php
 
-                                                    if ($modelUser->getIdTypeUsers() === 2) {
+                                                    if ($modelUser->getIdTypeUsers() === "2") {
 
                                                         ?>
 
-                                                        <i class="fa fa-trash-o"
-                                                           style="padding-left: 0px;margin-left: 28px;"></i>
-                                                        <i class="fa fa-edit" style="margin-left: 20px;"></i>
+                                                    <a href="../controller/deleteSource.php?idResource=<?php echo $source['idResources']; ?>&idSubject=<?php echo $idSubject; ?>"><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i><a/>
 
                                                         <?php
                                                     }
@@ -339,20 +291,18 @@ $sources = listResourcesBySubject(1);
                                         $i = 0;
                                         foreach($sources as $source){
 
-                                            if($source->getFolder() === "NOTA"){
+                                            if($source['folder'] === "NOTAS"){
                                                 ?>
 
-                                                <li><a href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
+                                                <li><a target="_blank" href="../res/<?php echo $source['location']; ?>"><?php echo $source['name']; ?></a>
 
                                                     <?php
 
-                                                    if ($modelUser->getIdTypeUsers() === 2) {
+                                                    if ($modelUser->getIdTypeUsers() === "2") {
 
                                                         ?>
 
-                                                        <i class="fa fa-trash-o"
-                                                           style="padding-left: 0px;margin-left: 28px;"></i>
-                                                        <i class="fa fa-edit" style="margin-left: 20px;"></i>
+                                                    <a href="../controller/deleteSource.php?idResource=<?php echo $source['idResources']; ?>&idSubject=<?php echo $idSubject; ?>"><i class="fa fa-trash-o" style="padding-left: 0px;margin-left: 28px;"></i><a/>
 
                                                         <?php
                                                     }

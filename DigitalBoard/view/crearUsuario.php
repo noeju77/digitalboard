@@ -3,20 +3,16 @@ include_once '../model/users.php';
 
 session_start();
 
-//if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-//    header("Location: ../controller/controllerLogOut.php");
-//}
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header("Location: ../controller/controllerLogOut.php");
+}
 
-/*
- * esto es para pruebas, borrar después
- * */
-$modelUser = new users();
-$modelUser->setEmail("jagarbar@alu.upo.es");
-$modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
+$modelUser = $_SESSION['user'];
 
-/*
- * Borrar hasya aquí
- * */
+if ($modelUser->getIdTypeUsers() != 1) {
+    header("Location: ../view/principal.php");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -53,11 +49,11 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                 class="collapse navbar-collapse" id="menu">
                 <ul class="nav navbar-nav flex-grow-1 justify-content-between flex-nowrap" style="margin-top: 16px;">
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" data-bs-hover-animate="tada" href="admin.php"><i class="icon-graduation apple-logo" style="font-size: 50px;margin-top: -11px;padding-top: 0px;"></i><p>DigitalBoard</p></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" style="font-size: 20px;"><button onclick="javascript:window.history.back();" >Administrar</button></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="admin.php" style="font-size: 20px;">Administrar</a></li>
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" href="usuario.php" style="font-size: 20px;" title="Personaliza tu perfil"><?php echo $modelUser->getEmail(); ?></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="#" style="width: 50px;"><img class="rounded img-fluid" src="../userimg/<?php echo $modelUser->getImage(); ?>" width="40px" height="50px" style="margin-right: 30px;width: auto;height: auto;margin-top: -5px;"></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="../controller/controllerLogOut.php" style="font-size: 20px;">Log Out</a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="#" style="margin-top: -5px;"><i class="icon ion-ios-search-strong" style="font-size: 30px;"></i></a></li>
                     <li class="nav-item d-none d-xs-block d-md-block" role="presentation"><a class="nav-link" href="https://www.upo.es/escuela-politecnica-superior/" target="_blank"><img style="width: 50px;height: 50px;margin-top: -10px;" src="../assets/img/Logo_UPO_EPS.jpg"></a></li>
@@ -82,11 +78,11 @@ $modelUser->setImage("../assets/img/Retrato_JAGB_peque.jpg");
                 <label for="city" style="margin-top: 10px;width: 100%;"><strong>Nombre&nbsp;</strong><br></label>
                 <input class="form-control" type="text" name="txtName" placeholder="Introduzca su nombre" required="" style="width: 100%;">
                 <label for="city" style="margin-top: 10px;width: 100%;"><strong>Apellidos</strong><br></label>
-                <input type="text" name="txtSurnames" placeholder="Introduzca sus apellidos" required="" style="width: 100%;">
+                <input class="form-control" type="text" name="txtSurnames" placeholder="Introduzca sus apellidos" required="" style="width: 100%;">
                 <label for="city" style="margin-top: 10px;width: 100%;"><strong>Correo Electrónico (usuario)</strong><br></label>
-                <input type="email" name="txtEmail" placeholder="Introduzca el correo" name="correo" required="" style="width: 100%;">
+                <input class="form-control" type="email" name="txtEmail" placeholder="Introduzca el correo" name="correo" required="" style="width: 100%;">
                 <label for="city" style="margin-top: 10px;width: 100%;"><strong>Contraseña</strong><br></label>
-                <input type="password" name="txtPassword" placeholder="Introduzca la contraseña" required="" style="width: 100%;">
+                <input class="form-control" type="password" name="txtPassword" placeholder="Introduzca la contraseña" required="" style="width: 100%;">
                 <button class="btn btn-primary" type="submit" style="margin: 0px;margin-top: 30px;">Guardar</button>
             </form>
         </div>
